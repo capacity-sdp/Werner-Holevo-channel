@@ -39,7 +39,7 @@ def choi(d,q,channel):
         
         tensor2 = channel(tensor1,d,q)
         
-        choi += np.kron(tensor1,tensor2,)
+        choi += np.kron(tensor1,tensor2)
     return choi
 
 
