@@ -63,5 +63,4 @@ def symmetry(d,q,channel):
         
     return T, sym
 
-print(symmetry(2,1/2,depol))
 
