@@ -5,8 +5,10 @@ Created on Sun Mar 27 17:01:41 2022
 @author: mason
 """
 
-import itertools
+import itertools as it
 import numpy as np
+import scipy as sp
+from scipy.stats import unitary_group
 
 def basis_vec(d):
     basis = []
@@ -26,7 +28,7 @@ def choi(d,q,channel):
     basis = []
     for i in range(d):
         basis.append(i)
-    a = list(itertools.product(basis,repeat=2))
+    a = list(it.product(basis,repeat=2))
     
     choi = np.zeros((d**2,d**2))
     
@@ -43,5 +45,23 @@ def choi(d,q,channel):
     return choi
 
 
-print(choi(2,1/2,depol))
+def symmetry(d,q,channel):
+    T = choi(d,q,channel)
+
+    U = unitary_group.rvs(d)
+    U_bar = np.conjugate(U)
+    
+    A = np.kron(U,U_bar)
+    B = np.conjugate(np.transpose(np.kron(U,U_bar)))
+    C = np.kron(U,U)
+    D = np.conjugate(np.transpose(np.kron(U,U)))
+
+    if channel == depol:
+        sym = np.dot(np.dot(A,T),B)
+    if channel == wer_hol:
+        sym = np.dot(np.dot(C,T),D)
+        
+    return T, sym
+
+print(symmetry(2,1/2,depol))
 
